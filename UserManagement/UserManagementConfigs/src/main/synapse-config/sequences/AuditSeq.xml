@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="AuditSeq" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <!-- Log the start of the sequence -->
+    <!-- Set the value of activityid to RequestId header -->
+    <log level="custom">
+        <property name="Audit Sequence" value="Starting automatic extraction of audit fields"/>
+    </log>
+    <!-- Retrieve the value of activityid header -->
+    <propertyGroup>
+        <property expression="get-property('requestId')" name="CorrelationId" scope="default" type="STRING"/>
+        <property name="Message" scope="default" type="STRING" value="SUCCESS"/>
+        <property name="FlowType" scope="default" type="STRING" value="'INT_'"/>
+        <property name="ServiceName" scope="default" type="STRING" value="API Gateway"/>
+        <property name="Source" scope="default" type="STRING" value="UserManagement"/>
+        <property name="Destination" scope="default" type="STRING" value="UserService"/>
+    </propertyGroup>
+    <!-- Log the extracted properties -->
+    <log level="custom">
+        <property expression="get-property('requestId')" name="CorrelationId"/>
+        <property expression="get-property('Message')" name="Message"/>
+        <property expression="get-property('FlowType')" name="FlowType"/>
+        <property expression="get-property('Source')" name="Source"/>
+        <property expression="get-property('ServiceName')" name="ServiceName"/>
+        <property expression="get-property('Destination')" name="Destination"/>
+    </log>
+    <!-- Transform the payload to include audit details -->
+    <payloadFactory media-type="json">
+        <format>{&#xd;
+  "addAuditRecord": {&#xd;
+	"correlationId":"$1",&#xd;
+    "message": "$2",&#xd;
+    "flowtype": "$3",&#xd;
+    "servicename": "$4",&#xd;
+    "source": "$5",&#xd;
+    "destination": "$6"&#xd;
+  }&#xd;
+}&#xd;
+</format>
+        <args>
+            <arg evaluator="xml" expression="get-property('Message')"/>
+            <arg evaluator="xml" expression="get-property('FlowType')"/>
+            <arg evaluator="xml" expression="get-property('ServiceName')"/>
+            <arg evaluator="xml" expression="get-property('Source')"/>
+            <arg evaluator="xml" expression="get-property('Destination')"/>
+        </args>
+    </payloadFactory>
+    <!-- Call the audit data service to store the record -->
+    <call>
+        <endpoint>
+            <address uri="http://localhost:8290/services/UserManagement.HTTPEndpoint/audit">
+                <suspendOnFailure>
+                    <initialDuration>-1</initialDuration>
+                    <progressionFactor>1</progressionFactor>
+                </suspendOnFailure>
+                <markForSuspension>
+                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                </markForSuspension>
+            </address>
+        </endpoint>
+    </call>
+    <!-- Log the completion of the audit sequence -->
+    <log level="custom">
+        <property name="Audit Sequence" value="Audit record successfully added to the database"/>
+    </log>
+</sequence>

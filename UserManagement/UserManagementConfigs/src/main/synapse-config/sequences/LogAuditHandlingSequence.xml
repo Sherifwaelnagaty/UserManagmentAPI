@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="LogAuditHandlingSequence" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <log level="custom">
+        <property expression="$ctx:transport.headers.CorrelationId" name="CorrelationId"/>
+        <property expression="get-property('message')" name="Message"/>
+        <property expression="get-property('flowtype')" name="FlowType"/>
+        <property expression="get-property('servicename')" name="Servicename"/>
+        <property expression="get-property('source')" name="Source"/>
+        <property expression="get-property('destination')" name="Destination"/>
+        <property expression="get-property('creationdate')" name="CreationDate"/>
+    </log>
+    <!-- Terminate the sequence -->
+</sequence>

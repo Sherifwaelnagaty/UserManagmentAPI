@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="FaultSeq" statistics="enable" trace="enable" xmlns="http://ws.apache.org/ns/synapse">
+    <!-- Log the start of the fault sequence -->
+    <!-- Transform the fault details into payload -->
+    <log level="custom">
+        <property name="Audit Fault Sequence" value="Starting fault sequence for error handling"/>
+    </log>
+    <!-- Extract required fault attributes -->
+    <propertyGroup>
+        <property expression="get-property('ERROR_MESSAGE')" name="ErrorMessage" scope="default" type="STRING"/>
+        <property expression="get-property('ERROR_DETAIL')" name="ErrorDetail" scope="default" type="STRING"/>
+        <property expression="get-property('ERROR_EXCEPTION')" name="ErrorException" scope="default" type="STRING"/>
+        <property name="ServiceName" scope="default" type="STRING" value="API Gateway"/>
+    </propertyGroup>
+    <!-- Log the extracted fault attributes -->
+    <sequence key="LogErrorHandlerSequence"/>
+    <payloadFactory media-type="json">
+        <format>{&#xd;
+    "Error": {&#xd;
+        "errormessage": $1,&#xd;
+        "errordetail": $2,&#xd;
+        "errorexception": $3,&#xd;
+        "servicename": $4&#xd;
+    }&#xd;
+}
+        </format>
+        <args>
+            <arg evaluator="xml" expression="get-property('RequestId')"/>
+            <arg evaluator="xml" expression="get-property('ErrorMessage')"/>
+            <arg evaluator="xml" expression="get-property('ErrorDetail')"/>
+            <arg evaluator="xml" expression="get-property('ErrorException')"/>
+            <arg evaluator="xml" expression="get-property('ServiceName')"/>
+            <arg evaluator="xml" expression="get-property('CreationDate')"/>
+        </args>
+    </payloadFactory>
+    <!-- Call an external fault logging service -->
+    <call>
+        <endpoint>
+            <address uri="http://localhost:8290/services/UserManagement.HTTPEndpoint/error">
+                <suspendOnFailure>
+                    <initialDuration>-1</initialDuration>
+                    <progressionFactor>1</progressionFactor>
+                </suspendOnFailure>
+                <markForSuspension>
+                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                </markForSuspension>
+            </address>
+        </endpoint>
+    </call>
+    <property description="SET HTTP STATUS CODE BAD REQUEST" name="HTTP_SC" scope="axis2" type="STRING" value="404"/>
+    <!-- Respond to the client with a generic fault message -->
+    <respond/>
+</sequence>

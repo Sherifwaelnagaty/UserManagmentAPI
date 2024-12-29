@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="UserManagementAPI" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/UserManagementAPI.xml</file>
+    </artifact>
+    <artifact name="UserManagementAPI_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/UserManagementAPI_swagger.yaml</file>
+    </artifact>
+    <artifact name="UserManagementAPI_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/UserManagementAPI_metadata.yaml</file>
+    </artifact>
+    <artifact name="LogAuditHandlingSequence" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/LogAuditHandlingSequence.xml</file>
+    </artifact>
+    <artifact name="Sequence_Template_1" groupId="com.example.template" version="1.0.0" type="synapse/sequenceTemplate" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/templates/Sequence_Template_1.xml</file>
+    </artifact>
+    <artifact name="Sequence_Template_1" groupId="com.example.template" version="1.0.0" type="synapse/sequenceTemplate" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/templates/Sequence_Template_1.xml</file>
+    </artifact>
+    <artifact name="Sequence_Template_1" groupId="com.example.template" version="1.0.0" type="synapse/sequenceTemplate" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/templates/Sequence_Template_1.xml</file>
+    </artifact>
+    <artifact name="Sequence_Template_1" groupId="com.example.template" version="1.0.0" type="synapse/sequenceTemplate" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/templates/Sequence_Template_1.xml</file>
+    </artifact>
+    <artifact name="Sequence_Template_1" groupId="com.example.template" version="1.0.0" type="synapse/sequenceTemplate" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/templates/Sequence_Template_1.xml</file>
+    </artifact>
+    <artifact name="FaultSeq" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/FaultSeq.xml</file>
+    </artifact>
+    <artifact name="LogErrorHandlerSequence" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/LogErrorHandlerSequence.xml</file>
+    </artifact>
+    <artifact name="CustomErrorHandlerSequence" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/CustomErrorHandlerSequence.xml</file>
+    </artifact>
+    <artifact name="AuditSeq" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/AuditSeq.xml</file>
+    </artifact>
+</artifacts>

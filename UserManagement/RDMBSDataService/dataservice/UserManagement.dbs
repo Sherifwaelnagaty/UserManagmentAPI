@@ -1,0 +1,104 @@
+<data name="UserManagement" serviceNamespace="" serviceGroup="" transports="http https">
+  <description>MySQL Data Service</description>
+  <config id="MySQL">
+    <property name="driverClassName">com.mysql.cj.jdbc.Driver</property>
+    <property name="url">jdbc:mysql://localhost:3306/user-management-project</property>
+    <property name="username">root</property>
+    <property name="password" />
+  </config>
+  <resource method="POST" path="/users">
+    <description>Add a new user</description>
+    <call-query href="AddUser">
+      <with-param name="firstname" query-param="firstname" />
+      <with-param name="lastname" query-param="lastname" />
+      <with-param name="email" query-param="email" />
+      <with-param name="password" query-param="password" />
+    </call-query>
+  </resource>
+  <resource method="PUT" path="/users">
+    <description>Update user details</description>
+    <call-query href="UpdateUser">
+      <with-param name="firstname" query-param="firstname" />
+      <with-param name="lastname" query-param="lastname" />
+      <with-param name="email" query-param="email" />
+      <with-param name="password" query-param="password" />
+      <with-param name="userid" query-param="userId" />
+    </call-query>
+  </resource>
+  <resource method="DELETE" path="/users/{userId}">
+    <description>Delete a user</description>
+    <call-query href="DeleteUser">
+      <with-param name="userid" query-param="userId" />
+    </call-query>
+  </resource>
+  <resource method="GET" path="/users/{userId}">
+    <description />
+    <call-query href="GetUser">
+      <with-param name="userId" query-param="userId" />
+    </call-query>
+  </resource>
+  <resource method="POST" path="/error">
+    <description>Log an error in the system</description>
+    <call-query href="AddError">
+      <with-param name="errormessage" query-param="errormessage" />
+      <with-param name="errordetail" query-param="errordetail" />
+      <with-param name="errorexception" query-param="errorexception" />
+      <with-param name="servicename" query-param="servicename" />
+    </call-query>
+  </resource>
+  <resource method="POST" path="/audit">
+    <description>Log an audit entry in the system</description>
+    <call-query href="AddAudit">
+      <with-param name="correlationId" query-param="correlationId" />
+      <with-param name="message" query-param="message" />
+      <with-param name="flowtype" query-param="flowtype" />
+      <with-param name="servicename" query-param="servicename" />
+      <with-param name="source" query-param="source" />
+      <with-param name="destination" query-param="destination" />
+    </call-query>
+  </resource>
+  <query id="AddUser" useConfig="MySQL">
+    <sql>INSERT INTO User (FirstName, LastName, Email, Password) 
+         VALUES (?, ?, ?, ?);</sql>
+    <param name="firstname" paramType="SCALAR" sqlType="STRING" />
+    <param name="lastname" paramType="SCALAR" sqlType="STRING" />
+    <param name="email" paramType="SCALAR" sqlType="STRING" />
+    <param name="password" paramType="SCALAR" sqlType="STRING" />
+  </query>
+  <query id="UpdateUser" useConfig="MySQL">
+    <sql>UPDATE User 
+         SET FirstName = ?, LastName = ?, Email = ?, Password = ? 
+         WHERE UserId = ?;</sql>
+    <param name="firstname" paramType="SCALAR" sqlType="STRING" />
+    <param name="lastname" paramType="SCALAR" sqlType="STRING" />
+    <param name="email" paramType="SCALAR" sqlType="STRING" />
+    <param name="password" paramType="SCALAR" sqlType="STRING" />
+    <param name="userid" paramType="SCALAR" sqlType="STRING" />
+  </query>
+  <query id="DeleteUser" useConfig="MySQL">
+    <sql>DELETE FROM User WHERE UserId = ?;</sql>
+    <param name="userid" paramType="SCALAR" sqlType="STRING" />
+  </query>
+  <query id="GetUser" useConfig="MySQL">
+    <sql>SELECT * FROM User WHERE UserId = ? ;</sql>
+    <param type="IN" name="userId" paramType="SCALAR" sqlType="STRING" optional="false" />
+  </query>
+  <query id="AddError" useConfig="MySQL">
+    <sql>INSERT INTO error (RequestId, ErrorMessage, ErrorDetail, ErrorException, ServiceName, CreationDate) 
+         VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP);</sql>
+    <param type="IN" name="errormessage" paramType="SCALAR" sqlType="STRING" optional="false" />
+    <param type="IN" name="errordetail" paramType="SCALAR" sqlType="STRING" optional="false" />
+    <param type="IN" name="errorexception" paramType="SCALAR" sqlType="STRING" optional="false" />
+    <param type="IN" name="servicename" paramType="SCALAR" sqlType="STRING" optional="false" />
+  </query>
+  <query id="AddAudit" useConfig="MySQL">
+    <sql>INSERT INTO audit (Message, FlowType, ServiceName, Source, Destination, CreationDate) 
+         VALUES ( ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);</sql>
+    <param type="IN" name="correlationId" paramType="SCALAR" sqlType="STRING" optional="false" />
+    <param type="IN" name="message" paramType="SCALAR" sqlType="STRING" optional="false" />
+    <param type="IN" name="flowtype" paramType="SCALAR" sqlType="STRING" optional="false" />
+    <param type="IN" name="servicename" paramType="SCALAR" sqlType="STRING" optional="false" />
+    <param type="IN" name="source" paramType="SCALAR" sqlType="STRING" optional="false" />
+    <param type="IN" name="destination" paramType="SCALAR" sqlType="STRING" optional="false" />
+  </query>
+</data>

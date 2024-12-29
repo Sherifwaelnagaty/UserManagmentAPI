@@ -1,0 +1,163 @@
+openapi: 3.0.1
+info:
+  title: UserManagementAPI
+  description: API Definition of UserManagementAPI
+  version: 1.0.0
+servers:
+- url: http://localhost:8290/user-management
+paths:
+  /users:
+    put:
+      summary: Update multiple users
+      requestBody:
+        description: Payload for updating users
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                    firstname:
+                      type: string
+                    lastname:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+              example:
+                user:
+                  userId: '18'
+                  firstname: sherifffff
+                  lastname: nagaty
+                  email: sherifwael0@gmail.com
+                  password: '123'
+        required: true
+      responses:
+        '200':
+          description: Successfully updated users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Users updated successfully
+        '400':
+          description: Bad request, invalid data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid payload structure
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unexpected server error
+    post:
+      summary: Create new users
+      requestBody:
+        description: Payload for creating new users
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    firstname:
+                      type: string
+                    lastname:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+              example:
+                user:
+                  firstname: sherif
+                  lastname: nagaty
+                  email: sherifwael0@gmail.com
+                  password: '1234'
+        required: true
+      responses:
+        '201':
+          description: Successfully created users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  userIds:
+                    type: array
+                    example:
+                    - '12345'
+                    - '67890'
+                    items:
+                      type: string
+        '400':
+          description: Bad request, invalid data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid payload structure
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unexpected server error
+  /users/{userId}:
+    get:
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: Default response
+    delete:
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: Default response

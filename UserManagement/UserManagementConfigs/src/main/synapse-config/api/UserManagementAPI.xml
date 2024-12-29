@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/user-management" name="UserManagementAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource faultSequence="FaultSeq" methods="POST" protocol="http" uri-template="/users">
+        <inSequence>
+            <!-- Log Request -->
+            <property expression="get-property('transport','CorrelationId')" name="requestId" scope="default" type="STRING"/>
+            <log level="full">
+                <property expression="get-property('FirstName')" name="FIRST NAME"/>
+                <property expression="get-property('LastName')" name="LAST NAME"/>
+                <property expression="get-property('Email')" name="EMAIL"/>
+                <property expression="get-property('password')" name="PASSWORD"/>
+            </log>
+            <!-- Construct Response -->
+            <call>
+                <endpoint>
+                    <http method="post" uri-template="http://localhost:8290/services/UserManagement.HTTPEndpoint/users">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <sequence key="AuditSeq"/>
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+    "result": {&#xd;
+        "success": "true",&#xd;
+        "message": "Users added successfully"&#xd;
+    }&#xd;
+}</format>
+                <args/>
+            </payloadFactory>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+    </resource>
+    <resource faultSequence="FaultSeq" methods="GET" protocol="http" uri-template="/users/{userId}">
+        <inSequence>
+            <!-- Log Request -->
+            <log level="full">
+                <property name="LOG START" value="GET USER STARTED"/>
+            </log>
+            <!-- Extract userId -->
+            <property expression="get-property('uri.var.userId')" name="userId" scope="default" type="STRING"/>
+            <!-- Construct Response -->
+            <call>
+                <endpoint>
+                    <http method="get" uri-template="http://local-host:8290/services/UserManagement.HTTPEndpoint/users/{uri.var.userId}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <sequence key="AuditSeq"/>
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+    "result": {&#xd;
+        "success": "true",&#xd;
+        "message": "Users added successfully"&#xd;
+    }&#xd;
+}</format>
+                <args/>
+            </payloadFactory>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+    </resource>
+    <resource faultSequence="FaultSeq" methods="PUT" protocol="http" uri-template="/users">
+        <inSequence>
+            <!-- Log Request -->
+            <log level="full">
+                <property expression="get-property('UserId')" name="USER ID"/>
+                <property expression="get-property('FirstName')" name="FIRST NAME"/>
+                <property expression="get-property('LastName')" name="LAST NAME"/>
+                <property expression="get-property('Email')" name="EMAIL"/>
+                <property expression="get-property('password')" name="PASSWORD"/>
+            </log>
+            <!-- Extract userId -->
+            <call>
+                <endpoint>
+                    <http method="put" uri-template="http://sherif-nagaty:8290/services/UserManagement.HTTPEndpoint/users">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <sequence key="AuditSeq"/>
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+    "result": {&#xd;
+        "success": "true",&#xd;
+        "message": "Users added successfully"&#xd;
+    }&#xd;
+}</format>
+                <args/>
+            </payloadFactory>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+    </resource>
+    <resource faultSequence="FaultSeq" methods="DELETE" protocol="http" uri-template="/users/{userId}">
+        <inSequence>
+            <!-- Log Request -->
+            <log level="full">
+                <property name="Step" value="Processing DELETE /users/{userId}"/>
+            </log>
+            <!-- Extract userId -->
+            <property expression="get-property('uri.var.userId')" name="userId" scope="default" type="STRING"/>
+            <!-- Construct Response -->
+            <call>
+                <endpoint>
+                    <http method="delete" uri-template="http://sherif-nagaty:8290/services/UserManagement.HTTPEndpoint/users/{uri.var.userId}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <sequence key="AuditSeq"/>
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+    "result": {&#xd;
+        "success": "true",&#xd;
+        "message": "Users added successfully"&#xd;
+    }&#xd;
+}</format>
+                <args/>
+            </payloadFactory>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+    </resource>
+</api>
